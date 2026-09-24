@@ -28,7 +28,7 @@ export function processWebhookEvent(event: WebhookEvent):
 
   const order = db
     .prepare('SELECT * FROM orders WHERE id = ?')
-    .get(event.orderId) as Order | undefined;
+    .get(event.orderId) as unknown as Order | undefined;
 
   if (!order) {
     if (event.status !== 'created') {
@@ -38,15 +38,14 @@ export function processWebhookEvent(event: WebhookEvent):
       };
     }
 
-    db.transaction(() => {
-      db.prepare(
-        `INSERT INTO orders (id, status, createdAt, updatedAt) VALUES (?, ?, ?, ?)`
-      ).run(event.orderId, 'created', now, now);
-
-      db.prepare(
-        `INSERT INTO order_events (eventId, orderId, status, timestamp, createdAt) VALUES (?, ?, ?, ?, ?)`
-      ).run(event.eventId, event.orderId, event.status, event.timestamp, now);
-    })();
+    db.exec('BEGIN');
+    db.prepare(
+      `INSERT INTO orders (id, status, createdAt, updatedAt) VALUES (?, ?, ?, ?)`
+    ).run(event.orderId, 'created', now, now);
+    db.prepare(
+      `INSERT INTO order_events (eventId, orderId, status, timestamp, createdAt) VALUES (?, ?, ?, ?, ?)`
+    ).run(event.eventId, event.orderId, event.status, event.timestamp, now);
+    db.exec('COMMIT');
 
     return { result: 'accepted' };
   }
@@ -72,14 +71,13 @@ export function processWebhookEvent(event: WebhookEvent):
     };
   }
 
-  db.transaction(() => {
-    db.prepare(`UPDATE orders SET status = ?, updatedAt = ? WHERE id = ?`)
-      .run(event.status, now, event.orderId);
-
-    db.prepare(
-      `INSERT INTO order_events (eventId, orderId, status, timestamp, createdAt) VALUES (?, ?, ?, ?, ?)`
-    ).run(event.eventId, event.orderId, event.status, event.timestamp, now);
-  })();
+  db.exec('BEGIN');
+  db.prepare(`UPDATE orders SET status = ?, updatedAt = ? WHERE id = ?`)
+    .run(event.status, now, event.orderId);
+  db.prepare(
+    `INSERT INTO order_events (eventId, orderId, status, timestamp, createdAt) VALUES (?, ?, ?, ?, ?)`
+  ).run(event.eventId, event.orderId, event.status, event.timestamp, now);
+  db.exec('COMMIT');
 
   return { result: 'accepted' };
 }
@@ -88,15 +86,15 @@ export function getAllOrders(status?: string): Order[] {
   if (status) {
     return db
       .prepare('SELECT * FROM orders WHERE status = ? ORDER BY createdAt DESC')
-      .all(status) as Order[];
+      .all(status) as unknown as Order[];
   }
-  return db.prepare('SELECT * FROM orders ORDER BY createdAt DESC').all() as Order[];
+  return db.prepare('SELECT * FROM orders ORDER BY createdAt DESC').all() as unknown as Order[];
 }
 
 export function getOrderById(orderId: string): OrderWithHistory | null {
   const order = db
     .prepare('SELECT * FROM orders WHERE id = ?')
-    .get(orderId) as Order | undefined;
+    .get(orderId) as unknown as Order | undefined;
 
   if (!order) return null;
 
@@ -104,5 +102,5 @@ export function getOrderById(orderId: string): OrderWithHistory | null {
     .prepare('SELECT * FROM order_events WHERE orderId = ? ORDER BY timestamp ASC')
     .all(orderId);
 
-  return { ...order, events } as OrderWithHistory;
+  return { ...order, events } as unknown as OrderWithHistory;
 }

@@ -13,8 +13,8 @@ export interface WebhookEvent {
 }
 
 export interface Order {
-  orderId: string;
-  currentStatus: OrderStatus;
+  id: string;
+  status: OrderStatus;
   createdAt: string;
   updatedAt: string;
 }
@@ -25,7 +25,7 @@ export interface OrderEvent {
   orderId: string;
   status: OrderStatus;
   timestamp: string;
-  receivedAt: string;
+  createdAt: string;
 }
 
 export interface OrderWithHistory extends Order {

@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach } from 'vitest';
 import {
   isValidTransition,
   processWebhookEvent,
@@ -6,7 +5,6 @@ import {
 } from '../src/services/orderService';
 import db from '../src/db/database';
 
-// Reset DB state before each test
 beforeEach(() => {
   db.exec('DELETE FROM order_events; DELETE FROM orders;');
 });
@@ -129,21 +127,19 @@ describe('processWebhookEvent - out-of-order events', () => {
     processWebhookEvent({ eventId: 'e2', orderId, status: 'paid',    timestamp: '2026-01-01T11:00:00Z' });
     processWebhookEvent({ eventId: 'e3', orderId, status: 'shipped', timestamp: '2026-01-01T12:00:00Z' });
 
-    // Simulate a late 'paid' event arriving after 'shipped'
+    // Late 'paid' event arriving after 'shipped'
     const result = processWebhookEvent({
       eventId: 'e_late',
       orderId,
       status: 'paid',
-      timestamp: '2026-01-01T10:30:00Z', // older than shipped
+      timestamp: '2026-01-01T10:30:00Z',
     });
 
     expect(result.result).toBe('out_of_order');
 
-    // Order status must remain 'shipped'
     const order = db.prepare('SELECT status FROM orders WHERE id = ?').get(orderId) as { status: string };
     expect(order.status).toBe('shipped');
 
-    // Event must still be stored in history
     const events = db.prepare('SELECT * FROM order_events WHERE orderId = ?').all(orderId);
     expect(events).toHaveLength(4);
   });
