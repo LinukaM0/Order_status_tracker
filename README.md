@@ -37,9 +37,10 @@ Built with Node.js, Express, TypeScript, SQLite (`node:sqlite`), React 19, Vite,
 **Valid status flow**: `created -> paid -> shipped -> delivered`. An order can move to `cancelled` from any state before `shipped`.
 
 ```
-created -> paid -> shipped -> delivered
-   │        │
-   └──► cancelled ◄──┘
+created ────► paid ────► shipped ────► delivered
+   │            │
+   ▼            ▼
+cancelled   cancelled
 ```
 
 ### Valid Statuses

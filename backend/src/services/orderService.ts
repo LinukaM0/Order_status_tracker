@@ -1,12 +1,8 @@
 import db from '../db/database';
 import { OrderStatus, WebhookEvent, Order, OrderWithHistory } from '../types';
 
-/**
- * State machine defining valid order lifecycle transitions:
- * Valid status flow: created -> paid -> shipped -> delivered.
- * An order can move to cancelled from any state before shipped (created, paid).
- * Terminal states: delivered, cancelled.
- */
+
+//An order can move to cancelled from any state before shipped (created, paid).
 export const VALID_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   created: ['paid', 'cancelled'],
   paid: ['shipped', 'cancelled'],
