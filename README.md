@@ -254,3 +254,27 @@ For production:
 cd backend && npm run build && npm start
 cd frontend && npm run build
 ```
+
+---
+
+## Skipped Work / Future Improvements
+
+Due to the approximately 3-hour timebox, the implementation focuses on the core webhook processing, order lifecycle validation, audit history, API endpoints, dashboard, and automated tests.
+
+With more development time, the following could be added:
+
+- Authentication and role-based access control
+- Pagination for large order lists
+- Webhook request authentication/signature verification
+- More advanced filtering and search
+- Production database migrations
+- API documentation using OpenAPI/Swagger
+- Docker/containerized deployment
+- Additional frontend component and integration tests
+- Structured production logging and monitoring
+
+---
+
+## Approximate Development Time
+
+- **Total Time**: Approximately **3 hours** (aligned with the assessment timebox).
