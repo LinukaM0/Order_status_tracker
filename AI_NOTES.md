@@ -82,18 +82,24 @@ I was involved in the implementation and verification of the main application fe
 
 ### Testing
 
-I worked through the main test scenarios and verified the expected behavior of the application, including:
+I verified the expected behavior of the application through a combination of automated unit tests and integration testing:
 
-* Creating a new order.
-* Valid forward status transitions.
-* Invalid status transitions.
-* Cancellation rules.
-* Duplicate webhook events.
-* Out-of-order webhook events.
-* Invalid payloads.
-* Missing orders.
-* Order listing and filtering.
-* Order details and event history.
+**Automated Unit Tests (`backend/tests/orderService.test.ts`):**
+* Valid forward status transitions (`created -> paid -> shipped -> delivered`).
+* Cancellation rules (allowed from `created` and `paid`, rejected after `shipped`).
+* Invalid status transitions (backward transitions, skipping steps, terminal state violations).
+* First-event validation (new orders must start with `created`).
+* Duplicate webhook event handling and idempotency (`UNIQUE` constraint enforcement).
+* Out-of-order webhook handling (storing late events in history without reverting current status).
+
+**Route & Dashboard Verification:**
+* Invalid payload validation (missing required fields or invalid status strings return HTTP 400).
+* Missing order lookups (non-existent order IDs return HTTP 404).
+* Order listing and status filtering (`GET /orders?status=...`).
+* Order details and chronological event history display.
+
+All automated tests run against an in-memory SQLite database (`:memory:`) for fast, isolated execution.
+
 
 I also used an in-memory SQLite database for isolated backend testing.
 
