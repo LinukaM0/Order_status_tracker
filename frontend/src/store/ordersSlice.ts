@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import { fetchOrders, fetchOrderById } from '../services/api';
 import type { Order, OrderWithHistory } from '../types';
 
