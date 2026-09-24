@@ -23,6 +23,12 @@ I used ChatGPT mainly for:
 * Reviewing implementation approaches and checking for possible issues.
 * Troubleshooting errors encountered during development.
 * Clarifying TypeScript, SQLite, Express, React, and testing concepts when needed.
+* Built the order tracking dashboard UI.
+* Added light and dark mode support.
+* Worked on responsive layouts and UI presentation.
+* Implemented the order details page.
+* Implemented the order listing and status display.
+
 
 The final implementation was based on my own review and understanding of the requirements rather than blindly accepting AI-generated suggestions.
 
@@ -67,18 +73,14 @@ I was involved in the implementation and verification of the main application fe
 
 ### Frontend
 
-* Built the order tracking dashboard UI.
-* Implemented the order listing and status display.
 * Implemented status filtering.
-* Implemented the order details page.
 * Implemented the chronological event history/timeline.
 * Connected the frontend to the backend REST APIs using Axios.
 * Worked with Redux Toolkit for application state management.
 * Implemented loading states.
 * Implemented empty states when no orders match the selected filter.
 * Implemented error states and retry behavior.
-* Worked on responsive layouts and UI presentation.
-* Added light and dark mode support.
+
 
 ### Testing
 
