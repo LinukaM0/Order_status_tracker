@@ -110,6 +110,7 @@ No manual migrations are required. The database file (`orders.db`) and its table
 
 - Dev/Prod: File-based SQLite database (`backend/orders.db`) with Write-Ahead Logging (`WAL`) enabled.
 - Test: In-memory SQLite database (`:memory:`) for instantaneous, isolated test runs.
+- Fresh Clones: Since database files (`*.db`) are excluded by `.gitignore`, cloning onto a new machine starts with a clean, empty database. Use the **Sample Webhook Events** section below to populate test orders.
 
 ---
 
