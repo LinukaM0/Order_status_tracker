@@ -1,7 +1,6 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 
-// Use in-memory DB during tests, file-based otherwise
 const dbPath =
   process.env.NODE_ENV === 'test'
     ? ':memory:'
@@ -9,12 +8,10 @@ const dbPath =
 
 const db = new Database(dbPath);
 
-// Enable WAL mode for better concurrent read performance (skipped for in-memory)
 if (dbPath !== ':memory:') {
   db.pragma('journal_mode = WAL');
 }
 
-// Create tables on startup — idempotent
 db.exec(`
   CREATE TABLE IF NOT EXISTS orders (
     id        TEXT PRIMARY KEY,
